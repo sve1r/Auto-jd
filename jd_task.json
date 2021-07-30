@@ -257,15 +257,6 @@
             }
         },
         {
-            "name": "超级直播间红包雨",
-            "type": "cron",
-            "time": "0,30,31 20-23/1 18 * *",
-            "job": {
-                "type": "runjs",
-                "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_live_redrain.js"
-            }
-        },
-        {
             "name": "京东抽奖机",
             "type": "cron",
             "time": "2 0 * * *",
@@ -527,16 +518,6 @@
             }
         },
         {
-            "name": "跳跳乐瓜分京豆",
-            "type": "cron",
-            "time": "2 0,11,21 * * *",
-            "running": true,
-            "job": {
-                "type": "runjs",
-                "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_jump.js"
-            }
-        },
-        {
             "name": "京东超级盒子",
             "type": "cron",
             "time": "20 9,20 * 5,6 *",
@@ -750,11 +731,11 @@
        {
       "name": "万物皆可国创",
       "type": "cron",
-      "time": "30 11 * * *",
+      "time": "50 0,6,10 * * *",
       "running": true,
       "job": {
         "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_superBrand.js"
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_olympic.js"
       }
     },
       {
@@ -785,6 +766,16 @@
       "job": {
         "type": "runjs",
         "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_productZ4Brand.js"
+      }
+    },
+      {
+      "name": "京喜领红包",
+      "type": "cron",
+      "time": "4 2,10 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_jxlhb.js"
       }
     },
       {
