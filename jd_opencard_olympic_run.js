@@ -1,36 +1,34 @@
 /*
-一天只能领200豆1个ck20豆  不设置变量默认只会运行到ck11
 
-请设置env变量 JD_OLYMPIC_WIN_GOLD    填写11就是跑到11个ck就停止  填写22就是跑到22个ck就停止 一天最多助力10个ck 推荐11的倍数填写！！每天改一次收益最大化
-
-第一个账号助力我 其他依次助力CK1
+env OPENCARD_OLYMPIC_RUN = true 就是开启ck1抽奖 (!!!抽奖时间可能很长，慢慢抽吧!!!)
+一起奔跑 为奥运加油!!! 第一个账号助力我 其他依次助力CK1
 第一个CK失效应该全都会助力我，亲注意一下
 入口复制到jd：
-29.0复制整段话 https:/J1HVTSDlw2adqL 看精彩奥运，玩夺金游戏，天天领福利￥n02VFCauVb￥ヤ﹎壹起祛【京東】
+20.0复制整段话 http:/JXouEyBJ3I1shT 一起奔跑 为奥运加油 分千万京豆万元大奖#fCM7M53RFa@后扌丁开乛倞崬
 
-更新地址：https://github.com/Tsukasa007/my_script
 ============Quantumultx===============
 [task_local]
-#7.29-8.9 奥运夺金挑战赛
-50 0 * * * jd_olympic_win_gold.js, tag=7.29-8.9 奥运夺金挑战赛, img-url=https://raw.githubusercontent.com/tsukasa007/icon/master/jd_olympic_win_gold.png, enabled=true
+#7.31-8.10 全民奥运 激情奔跑
+29 0,6,10 * * * jd_opencard_olympic_run.js, tag=7.31-8.10 全民奥运 激情奔跑, img-url=https://raw.githubusercontent.com/tsukasa007/icon/master/jd_opencard_olympic_run.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "50 0 * * *" script-path=jd_olympic_win_gold.js,tag=7.29-8.9 奥运夺金挑战赛
+cron "29 0,6,10 * * *" script-path=jd_opencard_olympic_run.js,tag=7.31-8.10 全民奥运 激情奔跑
 
 ===============Surge=================
-7.29-8.9 奥运夺金挑战赛 = type=cron,cronexp="50 0 * * *",wake-system=1,timeout=3600,script-path=jd_olympic_win_gold.js
+7.31-8.10 全民奥运 激情奔跑 = type=cron,cronexp="29 0,6,10 * * *",wake-system=1,timeout=3600,script-path=jd_opencard_olympic_run.js
 
 ============小火箭=========
-7.29-8.9 奥运夺金挑战赛 = type=cron,script-path=jd_olympic_win_gold.js, cronexpr="50 0 * * *", timeout=3600, enable=true
+7.31-8.10 全民奥运 激情奔跑 = type=cron,script-path=jd_opencard_olympic_run.js, cronexpr="29 0,6,10 * * *", timeout=3600, enable=true
 */
-const $ = new Env('7.29-8.9 奥运夺金挑战赛');
+const $ = new Env('7.31-8.10 全民奥运 激情奔跑');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let UA = require('./USER_AGENTS.js').USER_AGENT;
 const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [],
     cookie = '';
+let OPENCARD_OLYMPIC_RUN_FLAG = process.env.OPENCARD_OLYMPIC_RUN === 'true'
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -40,20 +38,10 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
+$.invitePinTaskList = []
 
-let JD_OLYMPIC_WIN_GOLD
-if (!process.env.JD_OLYMPIC_WIN_GOLD) {
-  $.log(`你没有设置JD_OLYMPIC_WIN_GOLD变量 默认为运行到11ck停止`)
-  $.log(`请设置env变量 JD_OLYMPIC_WIN_GOLD    填写11就是跑到11个ck就停止  填写22就是跑到22个ck就停止 一天最多助力10个ck 推荐11的倍数填写！！`)
-  $.log(`请设置env变量 JD_OLYMPIC_WIN_GOLD    填写11就是跑到11个ck就停止  填写22就是跑到22个ck就停止 一天最多助力10个ck 推荐11的倍数填写！！`)
-  $.log(`请设置env变量 JD_OLYMPIC_WIN_GOLD    填写11就是跑到11个ck就停止  填写22就是跑到22个ck就停止 一天最多助力10个ck 推荐11的倍数填写！！`)
-  $.log(`请设置env变量 JD_OLYMPIC_WIN_GOLD    填写11就是跑到11个ck就停止  填写22就是跑到22个ck就停止 一天最多助力10个ck 推荐11的倍数填写！！`)
-  JD_OLYMPIC_WIN_GOLD = 11
-}else {
-  JD_OLYMPIC_WIN_GOLD = Number(process.env.JD_OLYMPIC_WIN_GOLD)
-  $.log(`你设置了JD_OLYMPIC_WIN_GOLD变量 运行到 ${JD_OLYMPIC_WIN_GOLD} ck停止`)
-}
-
+const JD_API_HOST = `https://api.m.jd.com/client.action`;
+message = ""
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
@@ -61,7 +49,7 @@ if (!process.env.JD_OLYMPIC_WIN_GOLD) {
     });
     return;
   }
-  $.shareUuid = '8842c10024e341c2a4113e59b81ba141'
+  $.shareUuid = '267e2963c2a74ba29b54d6f3c008df6e'
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     if (cookie) {
@@ -70,6 +58,7 @@ if (!process.env.JD_OLYMPIC_WIN_GOLD) {
       $.isLogin = true;
       $.nickName = '';
       console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+      let wxCommonInfoTokenDataTmp = await getWxCommonInfoToken();
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
           "open-url": "https://bean.m.jd.com/bean/signIndex.action"
@@ -79,15 +68,15 @@ if (!process.env.JD_OLYMPIC_WIN_GOLD) {
         }
         continue
       }
-      let wxCommonInfoTokenData = await getWxCommonInfoToken();
+      let wxCommonInfoTokenData = wxCommonInfoTokenDataTmp.data;
       $.LZ_TOKEN_KEY = wxCommonInfoTokenData.LZ_TOKEN_KEY
       $.LZ_TOKEN_VALUE = wxCommonInfoTokenData.LZ_TOKEN_VALUE
       $.isvObfuscatorToken = await getIsvObfuscatorToken();
-      await $.wait(1000)
+      await $.wait(500)
       $.myPingData = await getMyPing()
-      if ($.myPingData ==="" || $.myPingData === '400001' || !$.myPingData || !$.myPingData.secretPin) {
+      if (!wxCommonInfoTokenData || $.myPingData ==="" || $.myPingData === '400001' || !$.myPingData || !$.myPingData.secretPin) {
         $.log("黑号!")
-        await $.wait(5000)
+        await $.wait(2000)
         continue
       }
       await getHtml();
@@ -95,34 +84,49 @@ if (!process.env.JD_OLYMPIC_WIN_GOLD) {
       $.actorUuid = await getActorUuid();
 
       let checkOpenCardData = await checkOpenCard();
-      await followShop()
-      // if (true) {
+      // if (false) {
       if (!checkOpenCardData.allOpenCard) {
         for (let cardList1Element of checkOpenCardData.cardList1) {
-          $.log('入会: ' + cardList1Element.name)
-          await $.wait(1000)
-          await join(cardList1Element.value)
+          $.log('入会: ' + cardList1Element.name);
+          // await $.wait(200);
+          await join(cardList1Element.value);
         }
         for (let cardList1Element of checkOpenCardData.cardList2) {
           $.log('入会: ' + cardList1Element.name)
-          await $.wait(1000)
+          // await $.wait(200)
           await join(cardList1Element.value)
         }
       }else{
-        $.log("是否全部入会" + checkOpenCardData.allOpenCard)
+        $.log("checkOpenCardData: " + checkOpenCardData.allOpenCard)
       }
-
-      await checkOpenCard();
+      //关注
+      await followShop();
+      await saveTask();
+      await saveTask();
+      let count = 0
+      while (checkOpenCardData.nowScore >= 50 && OPENCARD_OLYMPIC_RUN_FLAG) {
+        $.log('nowScore: ' + checkOpenCardData.nowScore)
+        await startDraw();
+        checkOpenCardData = await checkOpenCard();
+        if (count >= 20) {
+          let wxCommonInfoTokenData = await getWxCommonInfoToken();
+          $.LZ_TOKEN_KEY = wxCommonInfoTokenData.LZ_TOKEN_KEY
+          $.LZ_TOKEN_VALUE = wxCommonInfoTokenData.LZ_TOKEN_VALUE
+          $.isvObfuscatorToken = await getIsvObfuscatorToken();
+          await $.wait(1000)
+          $.myPingData = await getMyPing()
+          count = 0
+        }
+        count++;
+      }
+      await getDrawRecordHasCoupon()
       await openCardStartDraw(1)
       await openCardStartDraw(2)
-      await getDrawRecordHasCoupon()
+      await getActorUuid()
+      await checkOpenCard();
       $.log($.shareUuid)
       if (i === 0 && $.actorUuid) {
         $.shareUuid = $.actorUuid;
-      }
-      if ($.index == JD_OLYMPIC_WIN_GOLD) {
-        $.log(`你设置到${JD_OLYMPIC_WIN_GOLD} 停止，如果不如意请设置 JD_OLYMPIC_WIN_GOLD变量，注意看js说明！！！没有设置默认11停`)
-        break;
       }
     }
   }
@@ -130,28 +134,9 @@ if (!process.env.JD_OLYMPIC_WIN_GOLD) {
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
 
-function followShop() {
-  return new Promise(resolve => {
-    let body = `activityId=dz210768869312&pin=${encodeURIComponent($.myPingData.secretPin)}&actorUuid=${$.actorUuid}&taskType=23&taskValue=23&shareUuid=${$.shareUuid}`
-    $.post(taskPostUrl('/dingzhi/aoyun/moreshop//followShop', body,'https://lzdz1-isv.isvjcloud.com/dingzhi/aoyun/moreshop/followShop'), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          $.log(data)
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data.data);
-      }
-    })
-  })
-}
-
 function openCardStartDraw(type) {
   return new Promise(resolve => {
-    let body = `activityId=dz210768869312&actorUuid=${$.actorUuid}&pin=${encodeURIComponent($.myPingData.secretPin)}&type=${type}`
+    let body = `activityId=dz210768869313&actorUuid=${$.actorUuid}&pin=${encodeURIComponent($.myPingData.secretPin)}&type=${type}`
     $.post(taskPostUrl('/dingzhi/aoyun/moreshop/openCardStartDraw', body), async (err, resp, data) => {
       try {
         if (err) {
@@ -170,8 +155,8 @@ function openCardStartDraw(type) {
 
 function getDrawRecordHasCoupon() {
   return new Promise(resolve => {
-    let body = `activityId=dz210768869312&pin=${encodeURIComponent($.myPingData.secretPin)}&actorUuid=${$.actorUuid}&shareUuid=${$.shareUuid}&change=0`
-    $.post(taskPostUrl('/dingzhi/taskact/common/getDrawRecordHasCoupon', body), async (err, resp, data) => {
+    let body = `activityId=dz210768869313&pin=${encodeURIComponent($.myPingData.secretPin)}&actorUuid=${$.actorUuid}&shareUuid=${$.shareUuid}&change=0`
+    $.post(taskPostUrl('/dingzhi/taskact/common/getDayShareRecord', body), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
@@ -188,11 +173,69 @@ function getDrawRecordHasCoupon() {
   })
 }
 
+async function startDraw() {
+  return new Promise(resolve => {
+    let body = `pin=${encodeURIComponent($.myPingData.secretPin)}&activityId=dz210768869313&actorUuid=${$.actorUuid}&shareUuid=${$.shareUuid}&change=3`
+    $.post(taskPostUrl('/dingzhi/aoyun/moreshop/startDraw', body), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          // $.log('抽到了： ' + JSON.parse(data).data.name)
+          $.log('抽到了： ' + data)
+        }
+      } catch (e) {
+        await $.wait(5000)
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
+
+function followShop() {
+  return new Promise(resolve => {
+    let body = `pin=${encodeURIComponent($.myPingData.secretPin)}&activityId=dz210768869313&actorUuid=${$.actorUuid}&shareUuid=${$.shareUuid}&taskType=23&taskValue=10`
+    $.post(taskPostUrl('/dingzhi/aoyun/moreshop/followShop', body), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          $.log(data)
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data.data);
+      }
+    })
+  })
+}
+
+function saveTask() {
+  return new Promise(resolve => {
+    let body = `activityId=dz210768869313&pin=${encodeURIComponent($.myPingData.secretPin)}&actorUuid=${$.actorUuid}&shareUuid=${$.shareUuid}&taskType=23&taskValue=10`
+    $.post(taskPostUrl('/dingzhi/aoyun/moreshop/saveTask', body), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          $.log(data)
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data.data);
+      }
+    })
+  })
+}
 
 function checkOpenCard() {
   return new Promise(resolve => {
-    let body = `activityId=dz210768869312&actorUuid=${$.actorUuid}&shareUuid=${$.shareUuid}&pin=${encodeURIComponent($.myPingData.secretPin)}`
-    $.post(taskPostUrl('/dingzhi/aoyun/moreshop/checkOpenCard', body,'https://lzdz1-isv.isvjcloud.com/dingzhi/aoyun/moreshop/checkOpenCard'), async (err, resp, data) => {
+    let body = `activityId=dz210768869313&pin=${encodeURIComponent($.myPingData.secretPin)}&actorUuid=${$.actorUuid}&shareUuid=${$.shareUuid}`
+    $.post(taskPostUrl('/dingzhi/aoyun/moreshop/checkOpenCard', body), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
@@ -262,13 +305,15 @@ function getWxCommonInfoToken () {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
+          $.isLogin = false
         } else {
           data = JSON.parse(data);
         }
       } catch (e) {
+        $.isLogin = false
         $.logErr(e, resp)
       } finally {
-        resolve(data.data);
+        resolve(data);
       }
     })
   })
@@ -276,6 +321,7 @@ function getWxCommonInfoToken () {
 
 
 function getIsvObfuscatorToken () {
+  //await $.wait(20)
   return new Promise(resolve => {
     $.post({
       url: `https://api.m.jd.com/client.action?functionId=isvObfuscator&clientVersion=10.0.4&build=88641&client=android&d_brand=OPPO&d_model=PCAM00&osVersion=10&screen=2208*1080&partner=oppo&oaid=&openudid=7049442d7e415232&eid=eidAfb0d81231cs3I4yd3GgLRjqcx9qFEcJEmyOMn1BwD8wvLt/pM7ENipVIQXuRiDyQ0FYw2aud9+AhtGqo1Zhp0TsLEgoKZvAWkaXhApgim9hlEyRB&sdkVersion=29&lang=zh_CN&uuid=7049442d7e415232&aid=7049442d7e415232&area=4_48201_54794_0&networkType=wifi&wifiBssid=774de7601b5cddf9aad1ae30f3a3dfc0&uts=0f31TVRjBSsqndu4%2FjgUPz6uymy50MQJ2tPvKuaZvdpSgSWj4Rft6vj532pNv%2FCKtTDIdQHDjGpLlEc2uSsiMQQUTLV9Je9grp1cLq3H0VUzzfixZwWR4M5Q8POBAxkpKMun92VcSYcb6Es9VnenAIfXRVX%2FGYBK9bYxY4NCtDEYEP8Hdo5iUbygFO2ztKWTX1yisUO%2BQJEOojXBN9BqYg%3D%3D&uemps=0-0&st=1627049782034&sign=8faf48b6ada54b2497cfbb051cd0590d&sv=110`,
@@ -309,7 +355,7 @@ function getMyPing() {
   return new Promise(resolve => {
     $.post({
       url: `https://lzdz1-isv.isvjcloud.com/customer/getMyPing`,
-      body: `userId=1000377786&token=${$.isvObfuscatorToken}&fromType=APP`,
+      body: `userId=1000003443&token=${$.isvObfuscatorToken}&fromType=APP`,
       headers: {
         'User-Agent': `Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1`,
         'Content-Type':'application/x-www-form-urlencoded',
@@ -336,16 +382,17 @@ function getMyPing() {
 }
 
 function getHtml() {
+  //await $.wait(20)
   return new Promise(resolve => {
     $.get({
-      url: `https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity/1263438?activityId=dz210768869312&shareUuid=${$.shareUuid}&adsource=null&shareuserid4minipg=Pzucjj0+eJIsuMxb3FQreU7oeVP9kq2pYSH90mYt4m3fwcJlClpxrfmVYaGKuquQkdK3rLBQpEQH9V4tdrrh0w==&shopid=1000377786&lng=114.062626&lat=29.541499&sid=5fa6c7778669e4865e2e7e7ba5ea098w&un_area=4_48201_54794_0`,
+      url: `https://lzdz1-isv.isvjcloud.com/dingzhi/aoyun/moreshop/activity/6984232?activityId=dz210768869313&shareUuid=${$.shareUuid}&adsource=null&shareuserid4minipg=u/cWHIy7/x3Ij+HjfbnnePkaL5GGqMTUc8u/otw2E+a7Ak3lgFoFQlZmf45w8Jzw&shopid=1000003443&lng=114.062541&lat=29.541254&sid=0287d2fd880e98ffe42d4a3f303523dw&un_area=4_48201_54794_0 HTTP/1.1`,
       headers: {
         'User-Agent': UA,
         'Host':'lzdz1-isv.isvjcloud.com',
         'X-Requested-With': 'com.jingdong.app.mall',
         'Referer': `https://lzdz1-isv.isvjcloud.com/lzclient/dz/2021jan/eliminateGame/0713eliminate/?activityId=735c30216dc640638ceb6e63ff6d8b17&shareUuid=${$.shareUuid}&adsource=&shareuserid4minipg=u%2FcWHIy7%2Fx3Ij%20HjfbnnePkaL5GGqMTUc8u%2Fotw2E%20a7Ak3lgFoFQlZmf45w8Jzw&shopid=0&lng=114.062541&lat=29.541254&sid=57b59835c68ed8959d124d644f61c58w&un_area=4_48201_54794_0`,
         'Cookie': `IsvToken=${$.isvObfuscatorToken}; __jdc=60969652; __jd_ref_cls=Mnpm_ComponentApplied; pre_seq=1; __jda=60969652.1622198480453678909255.1622198480.1626617117.1626757026.38; __jdb=60969652.1.1622198480453678909255|38.1626757026; mba_sid=187.2; pre_session=vFIEj/DyoMrR+8jmAgzXSqWcNxIDZica|319; __jdv=60969652%7Cdirect%7C-%7Cnone%7C-%7C1624292158074; LZ_TOKEN_KEY=${$.LZ_TOKEN_KEY}; LZ_TOKEN_VALUE=${$.LZ_TOKEN_VALUE}; AUTH_C_USER=${$.secretPin}; ${$.lz_jdpin_token} mba_muid=1622198480453678909255.187.1626757027670`,
-      }
+  }
     }, async (err, resp, data) => {
       try {
         if (err) {
@@ -366,7 +413,7 @@ function adLog() {
   return new Promise(resolve => {
     $.post({
       url: `https://lzdz1-isv.isvjcloud.com/common/accessLogWithAD`,
-      body: `venderId=1000377786&code=99&pin=${encodeURIComponent($.myPingData.secretPin)}&activityId=dz210768869312&pageUrl=https://lzdz1-isv.isvjcloud.com/dingzhi/aoyun/moreshop/activity/8865665?activityId=dz210768869312&shareUuid=7655c87e8438408dbd5b50ccc9110835&adsource=null&shareuserid4minipg=+Z1XTjI8d/QbIJy5qV2I2k7oeVP9kq2pYSH90mYt4m3fwcJlClpxrfmVYaGKuquQkdK3rLBQpEQH9V4tdrrh0w==&shopid=1000377786&lng=114.062668&lat=29.541457&sid=5fa6c7778669e4865e2e7e7ba5ea098w&un_area=4_48201_54794_0&subType=APP&adSource=null`,
+      body: `venderId=1000003443&code=99&pin=${encodeURIComponent($.myPingData.secretPin)}&activityId=dz210768869313&pageUrl=https://lzdz1-isv.isvjcloud.com/dingzhi/aoyun/moreshop/activity/6984232?activityId=dz210768869313&shareUuid=${$.shareUuid}&adsource=null&shareuserid4minipg=u/cWHIy7/x3Ij+HjfbnnePkaL5GGqMTUc8u/otw2E+a7Ak3lgFoFQlZmf45w8Jzw&shopid=1000003443&lng=114.062541&lat=29.541254&sid=0287d2fd880e98ffe42d4a3f303523dw&un_area=4_48201_54794_0&subType=APP&adSource=LH`,
       headers: {
         'User-Agent': `Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1`,
         'Host':'lzdz1-isv.isvjcloud.com',
@@ -381,6 +428,7 @@ function adLog() {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           //  data = JSON.parse(data);
+
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -395,7 +443,7 @@ function getActorUuid() {
   return new Promise(resolve => {
     $.post({
       url: `https://lzdz1-isv.isvjcloud.com/dingzhi/aoyun/moreshop/activityContent`,
-      body: `activityId=dz210768869312&pin=${encodeURIComponent($.myPingData.secretPin)}&pinImg=https%3A%2F%2Fimg10.360buyimg.com%2Fimgzone%2Fjfs%2Ft1%2F7020%2F27%2F13511%2F6142%2F5c5138d8E4df2e764%2F5a1216a3a5043c5d.png&nick=${encodeURIComponent($.myPingData.nickname)}&cjyxPin=&cjhyPin=&shareUuid=${$.shareUuid}`,
+      body: `activityId=dz210768869313&pin=${encodeURIComponent($.myPingData.secretPin)}&pinImg=https%3A%2F%2Fimg10.360buyimg.com%2Fimgzone%2Fjfs%2Ft1%2F7020%2F27%2F13511%2F6142%2F5c5138d8E4df2e764%2F5a1216a3a5043c5d.png&nick=${encodeURIComponent($.myPingData.nickname)}&shareUuid=${$.shareUuid}`,
       headers: {
         'User-Agent': `Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1`,
         'Host':'lzdz1-isv.isvjcloud.com',
@@ -421,7 +469,7 @@ function getActorUuid() {
 }
 
 
-function taskPostUrl(url, body,referer) {
+function taskPostUrl(url, body) {
   return {
     url: `https://lzdz1-isv.isvjcloud.com${url}`,
     body: body,
@@ -434,7 +482,7 @@ function taskPostUrl(url, body,referer) {
       "Content-Type": "application/x-www-form-urlencoded",
       "Origin": "https://lzdz1-isv.isvjcloud.com",
       "Connection": "keep-alive",
-      "Referer": referer ? referer : `https://lzdz1-isv.isvjcloud.com/lzclient/dz/2021jan/eliminateGame/0713eliminate/?activityId=735c30216dc640638ceb6e63ff6d8b17&shareUuid=${$.shareUuid}&adsource=&shareuserid4minipg=u%2FcWHIy7%2Fx3Ij%20HjfbnnePkaL5GGqMTUc8u%2Fotw2E%20a7Ak3lgFoFQlZmf45w8Jzw&shopid=0&lng=114.062541&lat=29.541254&sid=57b59835c68ed8959d124d644f61c58w&un_area=4_48201_54794_0`,
+      "Referer": `https://lzdz1-isv.isvjcloud.com/dingzhi/personal/care/activity/6685289?activityId=dz2107100000366301&shareUuid=${$.shareUuid}&adsource=null&shareuserid4minipg=DQCK/ksVMxxhAtP2wbQfI07oeVP9kq2pYSH90mYt4m3fwcJlClpxrfmVYaGKuquQkdK3rLBQpEQH9V4tdrrh0w==&shopid=1000003663&lng=113.388015&lat=22.512769&sid=f9dd95649c5d4f0c0d31876c606b6cew&un_area=19_1657_52093_0`,
       "User-Agent": "Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn; Mi Note 2 Build/OPR1.170623.032) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.128 Mobile Safari/537.36 XiaoMi/MiuiBrowser/10.1.1 " ,
       'Cookie': `${cookie} LZ_TOKEN_KEY=${$.LZ_TOKEN_KEY}; LZ_TOKEN_VALUE=${$.LZ_TOKEN_VALUE}; AUTH_C_USER=${$.myPingData.secretPin}; ${$.lz_jdpin_token}`,
     }

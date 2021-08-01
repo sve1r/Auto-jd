@@ -34,7 +34,7 @@ inputs:
           name: fruit_pet_jxnc_speedsign_speedredpocke_beauty
           cronExpression: "0 5 0-18/6,8 * * * *"
           enable: true
-          argument: jd_fruit&jd_pet&jd_jxnc&jd_wsdlb&jd_speed_sign&jd_speed_redpocke&jd_beauty&jd_ppdz
+          argument: jd_fruit&jd_pet&jd_jxnc&jd_wsdlb&jd_speed_sign&jd_speed_redpocke&jd_beauty&jd_ppdz&jd_opencard_olympic_run
     - timer: #宠汪汪喂食 #宠汪汪 #摇钱树 #京东种豆得豆 #京喜工厂 #东东工厂 #健康社区收取能量
         parameters:
           name: joy_moneyTree_plantBean_dreamFactory_jdfactory
@@ -46,7 +46,7 @@ inputs:
           name: joyreward_cash_smallhome_live
           cronExpression: "0 0 0-16/8,20 * * * *"
           enable: true
-          argument: jd_joy_reward&jd_cash&jd_small_home&jd_live&jd_gold_creator&jd_redPacket
+          argument: jd_joy_reward&jd_cash&jd_small_home&jd_live&jd_gold_creator&jd_redPacket&jd_opencard_championship
     - timer: #健康社区 #旺旺开工位一次性
         parameters:
           name: healthcommunity
@@ -58,25 +58,25 @@ inputs:
           name: dailyegg_superredrain_mohe
           cronExpression: "0 1,30 0,5-23/2 * * * *"
           enable: true
-          argument: jd_daily_egg&jd_super_redrain&jd_mohe&jd_ylyn&jd_qqxing&jd_lsj
+          argument: jd_daily_egg&jd_super_redrain&jd_ylyn&jd_qqxing&jd_lsj
     - timer: #东东超市 #京喜财富岛 #京享值PK #京喜牧场
         parameters:
           name: cfd_superMarket
           cronExpression: "0 30 8,12,19,6-23/6 * * * *"
           enable: true
-          argument: jd_superMarket&jd_jxmc&jd_joypark_joy&jd_cfd&jd_big_winner&jd_jxlhb
+          argument: jd_jxmc&jd_joypark_joy&jd_cfd&jd_big_winner&jd_jxlhb&jd_superMarket
     - timer: #京豆变动通知 #疯狂的joy #京东排行榜 #领京豆额外奖励 #闪购盲盒 #京小兑 #幸运大转盘
         parameters:
           name: beanchange_crazyjoy_rankingList_beanhome_sgmh
           cronExpression: "0 30 2,9 * * * *"
           enable: true
-          argument: jd_bean_change&jd_rankingList&jd_bean_home&jd_sgmh&jd_jxd&jd_joy_park_task&jd_dpqd&jd_olympic&jd_jxg
+          argument: jd_bean_change&jd_rankingList&jd_bean_home&jd_sgmh&jd_jxd&jd_joy_park_task&jd_olympic&jd_jxg
     - timer: #金融养猪 #十元街 #京东快递 #京东赚赚 #女装盲盒  #跳跳乐瓜分京豆
         parameters:
           name: pigPet_syj_kd_jdzz_sign_nzmh_follow
           cronExpression: "0 58 0,7,15,21 * * * *"
           enable: true
-          argument: jd_pigPet&jd_syj&jd_joy_reward&jd_kd&jd_jdzz&jd_nzmh&jd_djjl&jd_ddly&jd_goodMorning
+          argument: jd_pigPet&jd_syj&jd_joy_reward&jd_kd&jd_jdzz&jd_nzmh&jd_djjl&jd_ddly&jd_goodMorning&jd_summer_mom_opencard
         environment: #  环境变量
         variables: #  环境变量对象
       AAA: BBB # 不要删除，用来格式化对齐追加的变量的

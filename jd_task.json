@@ -539,16 +539,6 @@
             }
         },
         {
-            "name": "5G超级盲盒",
-            "type": "cron",
-            "time": "0 0,6-23/3 * * *",
-            "running": true,
-            "job": {
-                "type": "runjs",
-                "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_mohe.js"
-            }
-        },
-        {
             "name": "京东电竞经理",
             "type": "cron",
             "time": "40 10 * * *",
@@ -658,16 +648,6 @@
                 "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_ylyn.js"
             }
         },
-      {
-      "name": "燃动夏季",
-      "type": "cron",
-      "time": "25 0,6-23/2 * * *",
-      "running": true,
-      "job": {
-        "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_summer_movement.js"
-      }
-    },
     {
       "name": "汪汪乐园任务",
       "type": "cron",
@@ -708,16 +688,6 @@
         "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_DrawEntrance.js"
       }
     },
-      {
-      "name": "店铺签到",
-      "type": "cron",
-      "time": "20 8 * * *",
-      "running": true,
-      "job": {
-        "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_dpqd.js"
-      }
-    },
        {
       "name": "发财大赢家",
       "type": "cron",
@@ -731,7 +701,7 @@
        {
       "name": "万物皆可国创",
       "type": "cron",
-      "time": "50 0,6,10 * * *",
+      "time": "55 0,7,13 * * *",
       "running": true,
       "job": {
         "type": "runjs",
@@ -759,9 +729,9 @@
       }
     },
        {
-      "name": "特物",
+      "name": "奥运夺金挑战赛",
       "type": "cron",
-      "time": "30 22,11 * * *",
+      "time": "45 0,11,17 * * *",
       "running": true,
       "job": {
         "type": "runjs",
@@ -771,11 +741,41 @@
       {
       "name": "京喜领红包",
       "type": "cron",
-      "time": "4 2,10 * * *",
+      "time": "4 0,11,18 * * *",
       "running": true,
       "job": {
         "type": "runjs",
         "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_jxlhb.js"
+      }
+    },
+        {
+      "name": "母音甄选",
+      "type": "cron",
+      "time": "35 0,9,15 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_summer_mom_opencard.js"
+      }
+    },
+       {
+      "name": "定格夺冠",
+      "type": "cron",
+      "time": "15 0,10,17 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard_championship.js"
+      }
+    },
+         {
+      "name": "激情奔跑",
+      "type": "cron",
+      "time": "25 0,6,10 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard_olympic_run.js"
       }
     },
       {
