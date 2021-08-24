@@ -739,13 +739,13 @@
       }
     },
         {
-      "name": "母音甄选",
+      "name": "领券中心签到",
       "type": "cron",
-      "time": "35 0,9,15 * * *",
+      "time": "35 0,15 * * *",
       "running": true,
       "job": {
         "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_summer_mom_opencard.js"
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_ccSign.js"
       }
     },
        {
@@ -789,23 +789,33 @@
       }
     },
        {
-      "name": "荣耀焕新季",
-      "type": "cron",
-      "time": "0 1,16 * * *",
-      "running": true,
-      "job": {
-        "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_ryhxj.js"
-      }
-    },
-       {
-      "name": "约惠一夏",
+      "name": "玩撞一夏",
       "type": "cron",
       "time": "23 0,15 * * *",
       "running": true,
       "job": {
         "type": "runjs",
         "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard_sum2.js"
+      }
+    },
+       {
+      "name": "一促即发",
+      "type": "cron",
+      "time": "23 1,18 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard2.js"
+      }
+    },
+       {
+      "name": "大牌狂欢趴",
+      "type": "cron",
+      "time": "43 1,18 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard.js"
       }
     },
        {
@@ -816,6 +826,16 @@
       "job": {
         "type": "runjs",
         "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_goldPhone.js"
+      }
+    },
+       {
+      "name": "联合开卡",
+      "type": "cron",
+      "time": "37 1,17 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard3.js"
       }
     },
       {
