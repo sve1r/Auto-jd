@@ -508,17 +508,6 @@
             }
         },
         {
-            "name": "京东超级盒子",
-            "type": "cron",
-            "time": "20 9,20 * 5,6 *",
-            "running": true,
-            "job": {
-                "type": "runjs",
-                "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_adolf_superbox.js"
-            }
-        },
-
-        {
             "name": "金榜创造营",
             "type": "cron",
             "time": "25 6,22 * * *",
@@ -689,16 +678,6 @@
       }
     },
        {
-      "name": "骁龙品牌日",
-      "type": "cron",
-      "time": "55 0,13 * * *",
-      "running": true,
-      "job": {
-        "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_olympic.js"
-      }
-    },
-       {
       "name": "特物z",
       "type": "cron",
       "time": "cron 23 8,9 * * *",
@@ -749,16 +728,6 @@
       }
     },
        {
-      "name": "来电好物季",
-      "type": "cron",
-      "time": "15 1,17 * * *",
-      "running": true,
-      "job": {
-        "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_ldhwj.js"
-      }
-    },
-       {
       "name": "星空大冒险",
       "type": "cron",
       "time": "23 0,13 * * *",
@@ -779,16 +748,6 @@
       }
     },
        {
-      "name": "京豆手机狂欢城",
-      "type": "cron",
-      "time": "0 0-18/6 * * *",
-      "running": true,
-      "job": {
-        "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_carnivalcity.js"
-      }
-    },
-       {
       "name": "玩撞一夏",
       "type": "cron",
       "time": "23 0,15 * * *",
@@ -796,26 +755,6 @@
       "job": {
         "type": "runjs",
         "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard_sum2.js"
-      }
-    },
-       {
-      "name": "一促即发",
-      "type": "cron",
-      "time": "23 1,18 * * *",
-      "running": true,
-      "job": {
-        "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard2.js"
-      }
-    },
-       {
-      "name": "大牌狂欢趴",
-      "type": "cron",
-      "time": "43 1,18 * * *",
-      "running": true,
-      "job": {
-        "type": "runjs",
-        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard.js"
       }
     },
        {
@@ -836,6 +775,26 @@
       "job": {
         "type": "runjs",
         "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_opencard3.js"
+      }
+    },
+       {
+      "name": "送豆得豆",
+      "type": "cron",
+      "time": "35 0,9 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_superBrand.js"
+      }
+    },
+       {
+      "name": "积分换话费",
+      "type": "cron",
+      "time": "35 1,16 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "https://gitee.com/asd920/Auto-jd/raw/main/jd_dwapp.js"
       }
     },
       {
